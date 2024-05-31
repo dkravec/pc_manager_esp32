@@ -20,39 +20,34 @@ AudioMixer::AudioMixer(AudioMixerType audioMixerData, int devMode) {
 }
 
 /* get light state*/
-int AudioMixer::getLightState() {
+int AudioMixer::getLedState() {
     // if led pin is not set, return
     if (!this->audioMixerData.led_pin) {
+        Serial.println("No LED pin set");
         return 0;
     }
-    return this->lightState;
+    return this->ledState;
 }
 
-/* set light state specifically*/
-void AudioMixer::setLightState(int lightState) {
-    // if led pin is not set, return
-    if (!this->audioMixerData.led_pin) {
-        return;
-    }
-    this->lightState = lightState;
-
-    if (this->lightState == HIGH) {
-        digitalWrite(this->audioMixerData.led_pin, HIGH);
-    } else {
-        digitalWrite(this->audioMixerData.led_pin, LOW);
-    }
-}
-
-/* Update light state, will make sure its up to date with data values */
-void AudioMixer::updateLightState() {
+/* set led state specifically*/
+void AudioMixer::setLedState(int analogLedValue) {
     // if led pin is not set, return
     if (!this->audioMixerData.led_pin) {
         Serial.println("No LED pin set");
         return;
     }
-    if (this->potentiometer.getValue() > 50) {
-        this->setLightState(HIGH);
-    } else {
-        this->setLightState(LOW);
+
+    this->ledState = analogLedValue;
+    analogWrite(this->audioMixerData.led_pin, analogLedValue);
+}
+
+/* Update led state, will make sure its up to date with data values */
+void AudioMixer::refreshLedState() {
+    // if led pin is not set, return
+    if (!this->audioMixerData.led_pin) {
+        Serial.println("No LED pin set");
+        return;
     }
+    int analogLedValue = floatMap(this->potentiometer.getValue(), 0, 100, 0, 255);
+    this->setLedState(analogLedValue);
 }

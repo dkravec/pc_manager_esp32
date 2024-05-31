@@ -9,6 +9,7 @@ class Potentiometer {
         int value;
         int prevValue;
         int prev2Value;
+        int analog_value;
         int devMode;
     public:
         Potentiometer();
@@ -19,4 +20,5 @@ class Potentiometer {
         int read();
         void print();
         String jsonData();
+        int getAnalogValue();
 };

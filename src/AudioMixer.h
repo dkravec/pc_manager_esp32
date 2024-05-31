@@ -17,13 +17,13 @@ class AudioMixer {
     private:
         AudioMixerType audioMixerData;
         int devMode;
-        int lightState;
+        int ledState;
     public:
         Potentiometer potentiometer; // public for now?
         AudioMixer();
         AudioMixer(AudioMixerType audioMixerData);
         AudioMixer(AudioMixerType audioMixerData, int devMode);
-        int getLightState();
-        void setLightState(int lightState);
-        void updateLightState();
+        int getLedState();
+        void setLedState(int analogLedValue);
+        void refreshLedState();
 };

@@ -44,6 +44,7 @@ int Potentiometer::read() {
 
     int steppedValue = value * value_steps;
 
+    this->analog_value = analogValue;
     if (this->value != steppedValue) {
         this->prev2Value = this->prevValue;
         this->prevValue = this->value;
@@ -78,3 +79,7 @@ String Potentiometer::jsonData() {
 
     return json;
 };
+
+int Potentiometer::getAnalogValue() {
+    return this->analog_value;
+}

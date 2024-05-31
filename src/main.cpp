@@ -33,15 +33,9 @@ void setup() {
     Serial.println("PC Manager started");
     Serial.println("This is the ESP32 program");
     Serial.println("Created by Daniel Kravec, Nova Productions");
-	pinMode(21, OUTPUT);
-	digitalWrite(21, HIGH);
 
     for (int i = 0; i < amountMixers; i++) {
         audioMixers[i] = new AudioMixer(audioMixerType[i], devMode);
-
-		//if (audioMixerType[i].screen_cs_pin) {
-		//	pinMode(audioMixerType[i].screen_cs_pin, OUTPUT);
-		//}
 
 		if (audioMixerType[i].led_pin) {
 			pinMode(audioMixerType[i].led_pin, OUTPUT);
@@ -58,7 +52,7 @@ void loop() {
 		if (reading == 1) {
 			String json = audioMixers[i]->potentiometer.jsonData();
 
-			audioMixers[i]->updateLightState();
+			audioMixers[i]->refreshLedState();
 		}
 	}
 }

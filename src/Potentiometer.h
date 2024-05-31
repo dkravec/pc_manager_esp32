@@ -11,6 +11,7 @@ class Potentiometer {
         int prev2Value;
         int devMode;
     public:
+        Potentiometer();
         Potentiometer(int pin);
         Potentiometer(int pin, int devMode);
         void setValue();

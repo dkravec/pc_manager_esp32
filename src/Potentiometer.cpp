@@ -3,18 +3,23 @@
 
 int value_steps = 10;
 
+/* do some fancy stuff with the numbers */
 float floatMap(float x, float in_min, float in_max, float out_min, float out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+/* Default constructor*/
+Potentiometer::Potentiometer() : Potentiometer(0) { };
 /* Constructor when only pin is set*/
 Potentiometer::Potentiometer(int pin) : Potentiometer(pin, 0) { };
-
 /* Final constructor */
 Potentiometer::Potentiometer(int pin, int devMode) {
     this->pin = pin;
     this->value = 0;
     this->devMode = devMode;
+    if (this->devMode) {
+        Serial.println("Potentiometer initialized");
+    }
 };
 
 /* should only be used when muting */
@@ -30,6 +35,9 @@ int Potentiometer::getValue() {
 
 /* used to read the current potentiometer */
 int Potentiometer::read() {
+    if (this->pin == 0) {
+        return 0;
+    }
     int analogValue = analogRead(pin);
     float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
     int value = floatMap(voltage, 0, 3.3, 0, 100) / value_steps;
@@ -45,8 +53,8 @@ int Potentiometer::read() {
             this->print();
         }
         if (this->prev2Value != this->value) {
-        return 1;
-    }
+            return 1;
+        }
     }
     return 0;
 };
@@ -61,6 +69,7 @@ void Potentiometer::print() {
     Serial.println(this->prevValue);
 };
 
+/* used to create a jsonlike string, ready to be sent to webserver */
 String Potentiometer::jsonData() {
     String json = "{\"pin\": " + String(this->pin) + ", \"value\": " + String(this->value) + ", \"prevValue\": " + String(this->prevValue) + ", \"prev2Value\": " + String(this->prev2Value) + "}";
     //if (this->devMode) {

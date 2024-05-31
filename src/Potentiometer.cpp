@@ -1,34 +1,56 @@
 #include <Arduino.h>
 #include "Potentiometer.h"
 
+int value_steps = 10;
+
 float floatMap(float x, float in_min, float in_max, float out_min, float out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-Potentiometer::Potentiometer(int pin) {
+/* Constructor when only pin is set*/
+Potentiometer::Potentiometer(int pin) : Potentiometer(pin, 0) { };
+
+/* Final constructor */
+Potentiometer::Potentiometer(int pin, int devMode) {
     this->pin = pin;
     this->value = 0;
+    this->devMode = devMode;
 };
 
-void Potentiometer::read() {
-    int analogValue = analogRead(pin);
-    // Rescale to potentiometer's voltage (from 0V to 3.3V):
-    float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
-
-    // print out the value you read:
-    Serial.print("Analog: ");
-    Serial.print(analogValue);
-    Serial.print(", Voltage: ");
-    Serial.print(voltage);
-
-    // Scale to 0-100:
-    value = floatMap(voltage, 0, 3.3, 0, 100);
-    Serial.print(", Value: ");
-    Serial.println(value);
-
-    return;
+/* should only be used when muting */
+void Potentiometer::setValue() {
+    this->value = value;
 };
 
+/* can be used when wanting the current value*/
 int Potentiometer::getValue() {
-    return value;
+    this->read();
+    return this->value;
+};
+
+/* used to read the current potentiometer */
+void Potentiometer::read() {
+    this->prevValue = this->value;
+
+    int analogValue = analogRead(pin);
+    float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
+    int value = floatMap(voltage, 0, 3.3, 0, 100) / value_steps;
+
+    this->value = value * value_steps;
+
+    if (devMode) {
+        if (this->value != this->prevValue) {
+            this->print();
+        }
+    }
+};
+
+/* nicely print the previous and current value */
+void Potentiometer::print() {
+    Serial.print("Potentiometer on pin ");
+    Serial.print(this->pin);
+    Serial.print(" has value ");
+    Serial.print(this->value);
+    Serial.print(", Previous value: ");
+    Serial.println(this->prevValue);
 };

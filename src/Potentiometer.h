@@ -8,8 +8,12 @@ class Potentiometer {
         int pin;
         int value;
         int prevValue;
+        int devMode;
     public:
         Potentiometer(int pin);
-        void read();
+        Potentiometer(int pin, int devMode);
+        void setValue();
         int getValue();
+        void read();
+        void print();
 };

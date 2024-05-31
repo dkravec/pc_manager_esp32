@@ -29,20 +29,26 @@ int Potentiometer::getValue() {
 };
 
 /* used to read the current potentiometer */
-void Potentiometer::read() {
-    this->prevValue = this->value;
-
+int Potentiometer::read() {
     int analogValue = analogRead(pin);
     float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
     int value = floatMap(voltage, 0, 3.3, 0, 100) / value_steps;
 
-    this->value = value * value_steps;
+    int steppedValue = value * value_steps;
 
-    if (devMode) {
-        if (this->value != this->prevValue) {
+    if (this->value != steppedValue) {
+        this->prev2Value = this->prevValue;
+        this->prevValue = this->value;
+        this->value = steppedValue;
+
+        if (devMode) {
             this->print();
         }
+        if (this->prev2Value != this->value) {
+        return 1;
     }
+    }
+    return 0;
 };
 
 /* nicely print the previous and current value */
@@ -53,4 +59,13 @@ void Potentiometer::print() {
     Serial.print(this->value);
     Serial.print(", Previous value: ");
     Serial.println(this->prevValue);
+};
+
+String Potentiometer::jsonData() {
+    String json = "{\"pin\": " + String(this->pin) + ", \"value\": " + String(this->value) + ", \"prevValue\": " + String(this->prevValue) + ", \"prev2Value\": " + String(this->prev2Value) + "}";
+    //if (this->devMode) {
+        Serial.println(json);
+    //}
+
+    return json;
 };

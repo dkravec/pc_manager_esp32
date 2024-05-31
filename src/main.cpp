@@ -18,7 +18,7 @@ int pot_2_pin = 35;
 // not done
 
 // other data
-int devMode = 1;
+int devMode = 0;
 
 // setup classes
 Potentiometer pot_0_d(pot_0_pin, devMode);
@@ -35,7 +35,21 @@ void setup() {
 
 /* main program loop */
 void loop() {
-	pot_0_d.read();
-	pot_1_d.read();
-	pot_2_d.read();
+	// read the potentiometers
+	int read_0 = pot_0_d.read();
+	int read_1 = pot_1_d.read();
+	int read_2 = pot_2_d.read();
+
+	if (read_0 == 1) {
+		String json = pot_0_d.jsonData();
+	}
+	if (read_1 == 1) {
+		String json = pot_1_d.jsonData();
+	}
+	if (read_2 == 1) {
+		String json = pot_2_d.jsonData();
+	}
+
+
+	
 }

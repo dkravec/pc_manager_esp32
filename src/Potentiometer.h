@@ -8,12 +8,14 @@ class Potentiometer {
         int pin;
         int value;
         int prevValue;
+        int prev2Value;
         int devMode;
     public:
         Potentiometer(int pin);
         Potentiometer(int pin, int devMode);
         void setValue();
         int getValue();
-        void read();
+        int read();
         void print();
+        String jsonData();
 };

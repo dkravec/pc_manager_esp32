@@ -19,9 +19,9 @@
 // POTENTIOMETER_PIN, SCREEN_PIN, BUTTON_PIN, LED_PIN
 // if 0, will not be used
 AudioMixerType audioMixerType[amountMixers] = {
-	AudioMixerType({33, 19, 0, 0}),
-	AudioMixerType({32, 17, 0, 0}),
-	AudioMixerType({35, 22, 0, 0})
+	AudioMixerType({35, 19, 0, 25}),
+	AudioMixerType({33, 17, 0, 26}),
+	AudioMixerType({32, 22, 0, 27})
 };
 
 // Empty array of audio mixers
@@ -33,9 +33,19 @@ void setup() {
     Serial.println("PC Manager started");
     Serial.println("This is the ESP32 program");
     Serial.println("Created by Daniel Kravec, Nova Productions");
+	pinMode(21, OUTPUT);
+	digitalWrite(21, HIGH);
 
     for (int i = 0; i < amountMixers; i++) {
         audioMixers[i] = new AudioMixer(audioMixerType[i], devMode);
+
+		//if (audioMixerType[i].screen_cs_pin) {
+		//	pinMode(audioMixerType[i].screen_cs_pin, OUTPUT);
+		//}
+
+		if (audioMixerType[i].led_pin) {
+			pinMode(audioMixerType[i].led_pin, OUTPUT);
+		}
     }
 }
 
@@ -47,6 +57,8 @@ void loop() {
 
 		if (reading == 1) {
 			String json = audioMixers[i]->potentiometer.jsonData();
+
+			audioMixers[i]->updateLightState();
 		}
 	}
 }

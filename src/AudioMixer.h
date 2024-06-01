@@ -1,4 +1,5 @@
 #include "Potentiometer.h"
+#include "Screen.h"
 
 /* Structure for audio mixer type 
 * potentiometer_pin: pin for the potentiometer
@@ -20,10 +21,12 @@ class AudioMixer {
         int ledState;
     public:
         Potentiometer potentiometer; // public for now?
+        Screen screen; // public for now?
         AudioMixer();
         AudioMixer(AudioMixerType audioMixerData);
         AudioMixer(AudioMixerType audioMixerData, int devMode);
         int getLedState();
         void setLedState(int analogLedValue);
         void refreshLedState();
+        void refreshScreen();
 };

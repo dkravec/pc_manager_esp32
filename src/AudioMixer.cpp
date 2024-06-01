@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "AudioMixer.h"
 #include "Potentiometer.h"
+#include "Utils.h"
 
 /* Default Constructor for Audio Mixer*/
 AudioMixer::AudioMixer() : AudioMixer({0, 0, 0, 0}) { }
@@ -13,6 +14,7 @@ AudioMixer::AudioMixer(AudioMixerType audioMixerData, int devMode) {
     this->audioMixerData = audioMixerData;
     this->devMode = devMode;
     this->potentiometer = Potentiometer(this->audioMixerData.potentiometer_pin, this->devMode);
+    this->screen = Screen(this->audioMixerData.screen_cs_pin, this->devMode);
 
     if (this->devMode) {
         Serial.println("AudioMixer initialized");
@@ -50,4 +52,14 @@ void AudioMixer::refreshLedState() {
     }
     int analogLedValue = floatMap(this->potentiometer.getValue(), 0, 100, 0, 255);
     this->setLedState(analogLedValue);
+}
+
+/* Update the screen */
+void AudioMixer::refreshScreen() {
+    // if screen pin is not set, return
+    if (!this->audioMixerData.screen_cs_pin) {
+        Serial.println("No Screen pin set");
+        return;
+    }
+    this->screen.volumeScreen(this->potentiometer.getValue());
 }

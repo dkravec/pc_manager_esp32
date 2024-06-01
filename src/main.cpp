@@ -8,7 +8,7 @@
 
 // 0 = off, 1 = on
 // allows for debugging
-#define devMode 0 	
+#define devMode 1	
 
 // Pins for screens
 #define SCREEN_0_PIN 19
@@ -39,6 +39,7 @@ void setup() {
 
 		if (audioMixerType[i].led_pin) {
 			pinMode(audioMixerType[i].led_pin, OUTPUT);
+			pinMode(audioMixerType[i].screen_cs_pin, OUTPUT);
 		}
     }
 }
@@ -53,6 +54,7 @@ void loop() {
 			String json = audioMixers[i]->potentiometer.jsonData();
 
 			audioMixers[i]->refreshLedState();
+			audioMixers[i]->refreshScreen();
 		}
 	}
 }

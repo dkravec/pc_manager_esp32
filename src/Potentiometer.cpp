@@ -1,12 +1,8 @@
 #include <Arduino.h>
 #include "Potentiometer.h"
+#include "Utils.h"
 
 int value_steps = 10;
-
-/* do some fancy stuff with the numbers */
-float floatMap(float x, float in_min, float in_max, float out_min, float out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
 
 /* Default constructor*/
 Potentiometer::Potentiometer() : Potentiometer(0) { };
@@ -72,7 +68,7 @@ void Potentiometer::print() {
 
 /* used to create a jsonlike string, ready to be sent to webserver */
 String Potentiometer::jsonData() {
-    String json = "{\"pin\": " + String(this->pin) + ", \"value\": " + String(this->value) + ", \"prevValue\": " + String(this->prevValue) + ", \"prev2Value\": " + String(this->prev2Value) + "}";
+    String json = "{\"pin\": " + String(this->pin) + ", \"value\": " + String(this->value) + ", \"prevValue\": " + String(this->prevValue) + ", \"prev2Value\": " + String(this->prev2Value) +  ", \"analogValue\": " + String(this->analog_value) + "}";
     //if (this->devMode) {
         Serial.println(json);
     //}

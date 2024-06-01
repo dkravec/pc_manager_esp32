@@ -3,32 +3,16 @@
 #include <SPI.h>
 #include <TFT_eSPI.h>
 
-TFT_eSPI tft;
 
 Screen::Screen() : Screen(0) { };
 Screen::Screen(int pin) : Screen(pin, 0) { };
-Screen::Screen(int pin, int devMode) {
-    this->pin = pin;
+Screen::Screen(int pin, int devMode) : Screen((*(new TFT_eSPI())), pin, devMode) { };
+Screen::Screen(TFT_eSPI& tft) : Screen(tft, 0) { };
+Screen::Screen(TFT_eSPI& tft, int pin) : Screen(tft, pin, 0) { };
+Screen::Screen(TFT_eSPI& tft, int pin, int devMode) : tft(tft), pin(pin), devMode(devMode) {
     this->current = 0;
     this->timestamp = 0;
     this->isOn = 0;
-    this->devMode = devMode;
-
-
-    //this->tft = TFT_eSPI();
-    digitalWrite (this->pin, HIGH); 
-    tft.begin();
-    tft.setRotation(0);
-    tft.fillScreen(TFT_BLUE);
-    tft.setTextColor(TFT_WHITE, TFT_BLACK);
-    tft.setCursor(120, 120);
-    tft.setTextSize(2);
-    tft.println("Hello World");
-    digitalWrite (this->pin, LOW); 
-
-    if (this->devMode) {
-        Serial.println("Screen initialized");
-    }
 };
 
 void Screen::setScreen(int type) {
@@ -80,18 +64,14 @@ void Screen::print() {
 }
 
 void Screen::writeText(String text) {
-    digitalWrite (this->pin, HIGH); 
+    digitalWrite (this->pin, 0); 
 
-    //tft.init();
-    //tft.setRotation(1);
-    //tft.fillScreen(TFT_BLACK);
-    //tft.setTextColor(TFT_WHITE, TFT_BLACK);
-    //tft.setCursor(0, 0);
-    //tft.setTextSize(2);
-    //tft.println(text);
-
+    this->tft.fillScreen(TFT_BLUE); // clear screen ?
+    this->tft.setCursor(60, 60);
+    this->tft.println(text);
     this->jsonScreenData(text);
-    digitalWrite (this->pin, LOW);
+
+    digitalWrite (this->pin, 1);
 }
 
 void Screen::jsonScreenData(String text) {

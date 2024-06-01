@@ -1,5 +1,7 @@
 #include "Potentiometer.h"
 #include "Screen.h"
+#include <SPI.h>
+#include <TFT_eSPI.h>
 
 /* Structure for audio mixer type 
 * potentiometer_pin: pin for the potentiometer
@@ -25,6 +27,8 @@ class AudioMixer {
         AudioMixer();
         AudioMixer(AudioMixerType audioMixerData);
         AudioMixer(AudioMixerType audioMixerData, int devMode);
+        AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft);
+        AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft, int devMode);
         int getLedState();
         void setLedState(int analogLedValue);
         void refreshLedState();

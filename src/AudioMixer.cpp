@@ -2,19 +2,18 @@
 #include "AudioMixer.h"
 #include "Potentiometer.h"
 #include "Utils.h"
+#include <SPI.h>
+#include <TFT_eSPI.h>
 
-/* Default Constructor for Audio Mixer*/
+/* Constructors for Audio Mixer*/
 AudioMixer::AudioMixer() : AudioMixer({0, 0, 0, 0}) { }
-
-/* Constructor when only audioMixerData is set*/
 AudioMixer::AudioMixer(AudioMixerType audioMixerData) : AudioMixer(audioMixerData, 0) { }
+AudioMixer::AudioMixer(AudioMixerType audioMixerData, int devMode) : AudioMixer(audioMixerData, *(new TFT_eSPI()), devMode){ }
+AudioMixer::AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft) : AudioMixer(audioMixerData, tft, 0) { }
 
-/* Final Constructor for Audio Mixer*/
-AudioMixer::AudioMixer(AudioMixerType audioMixerData, int devMode) {
-    this->audioMixerData = audioMixerData;
-    this->devMode = devMode;
+/* Final Constructor for Audio Mixer with TFT_eSPI*/
+AudioMixer::AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft, int devMode) : audioMixerData(audioMixerData), screen(tft, audioMixerData.screen_cs_pin), devMode(devMode) {
     this->potentiometer = Potentiometer(this->audioMixerData.potentiometer_pin, this->devMode);
-    this->screen = Screen(this->audioMixerData.screen_cs_pin, this->devMode);
 
     if (this->devMode) {
         Serial.println("AudioMixer initialized");

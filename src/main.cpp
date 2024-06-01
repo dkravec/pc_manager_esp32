@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "AudioMixer.h"
 #include "Potentiometer.h"
+#include <SPI.h>
+#include <TFT_eSPI.h>
 
 // Main Data Data
 // amount of audio mixers
@@ -27,6 +29,10 @@ AudioMixerType audioMixerType[amountMixers] = {
 // Empty array of audio mixers
 AudioMixer* audioMixers[amountMixers];
 
+// screen
+TFT_eSPI tft = TFT_eSPI();
+
+/* setup function */
 void setup() {
     // put your setup code here, to run once:
     Serial.begin(11520);
@@ -35,13 +41,30 @@ void setup() {
     Serial.println("Created by Daniel Kravec, Nova Productions");
 
     for (int i = 0; i < amountMixers; i++) {
-        audioMixers[i] = new AudioMixer(audioMixerType[i], devMode);
+        audioMixers[i] = new AudioMixer(audioMixerType[i], tft, devMode);
 
 		if (audioMixerType[i].led_pin) {
 			pinMode(audioMixerType[i].led_pin, OUTPUT);
 			pinMode(audioMixerType[i].screen_cs_pin, OUTPUT);
+
+			digitalWrite(audioMixerType[i].screen_cs_pin, 0);
 		}
     }
+
+	tft.init();
+	tft.setRotation(0);
+	tft.fillScreen(TFT_BLUE);
+    tft.setTextColor(TFT_WHITE, TFT_BLACK);
+    tft.setCursor(60, 60);
+    tft.println("Welcome!");
+
+    for (int i = 0; i < amountMixers; i++) {
+		if (audioMixerType[i].screen_cs_pin) {
+			digitalWrite(audioMixerType[i].screen_cs_pin, 1);
+		}
+    }
+	
+	Serial.println("Setup complete!");
 }
 
 /* main program loop */

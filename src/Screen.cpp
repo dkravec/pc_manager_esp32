@@ -4,6 +4,7 @@
 #include <TFT_eSPI.h>
 
 
+/* Screen constructors */
 Screen::Screen() : Screen(0) { };
 Screen::Screen(int pin) : Screen(pin, 0) { };
 Screen::Screen(int pin, int devMode) : Screen((*(new TFT_eSPI())), pin, devMode) { };
@@ -15,32 +16,7 @@ Screen::Screen(TFT_eSPI& tft, int pin, int devMode) : tft(tft), pin(pin), devMod
     this->isOn = 0;
 };
 
-void Screen::setScreen(int type) {
-    if (this->pin == 0) {
-        return;
-    }
-    if (type == 0) {
-        digitalWrite(this->pin, LOW);
-        this->isOn = 0;
-    } else {
-        digitalWrite(this->pin, HIGH);
-        this->isOn = 1;
-    }
-};
-
-void Screen::powerScreen(int power) {
-    if (this->pin == 0) {
-        return;
-    }
-    if (power == 0) {
-        digitalWrite(this->pin, LOW);
-        this->isOn = 0;
-    } else {
-        digitalWrite(this->pin, HIGH);
-        this->isOn = 1;
-    }
-};
-
+/* show the volume screen */
 void Screen::volumeScreen(int volume) {
     if (this->devMode) {
         Serial.println("Volume: " + String(volume));
@@ -52,6 +28,7 @@ void Screen::volumeScreen(int volume) {
     this->writeText("Volume: " + String(volume));
 };
 
+/* print text to console */
 void Screen::print() {
     Serial.print("Screen on pin ");
     Serial.print(this->pin);
@@ -63,6 +40,7 @@ void Screen::print() {
     }
 }
 
+/* print text to screen */
 void Screen::writeText(String text) {
     digitalWrite (this->pin, 0); 
 
@@ -74,9 +52,11 @@ void Screen::writeText(String text) {
     digitalWrite (this->pin, 1);
 }
 
-void Screen::jsonScreenData(String text) {
+/* print jsonlike data to console*/
+String Screen::jsonScreenData(String text) {
     String json = "{\"device:\":\"screen\",\"pin\": " + String(this->pin) + ", \"isOn\": " + String(this->isOn) + ", \"text\": \"" + text + "\"}";
     if (this->devMode) {
         Serial.println(json);
     }
+    return json;
 }

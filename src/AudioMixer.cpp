@@ -14,6 +14,7 @@ AudioMixer::AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft) : AudioMixe
 /* Final Constructor for Audio Mixer with TFT_eSPI*/
 AudioMixer::AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft, int devMode) : audioMixerData(audioMixerData), screen(tft, audioMixerData.screen_cs_pin), devMode(devMode) {
     this->potentiometer = Potentiometer(this->audioMixerData.potentiometer_pin, this->devMode);
+    this->button = Button(this->audioMixerData.button_pin, this->devMode);
 
     if (this->devMode) {
         Serial.println("AudioMixer initialized");

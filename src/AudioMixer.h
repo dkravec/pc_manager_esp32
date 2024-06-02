@@ -1,7 +1,9 @@
+#pragma once
 #include "Potentiometer.h"
 #include "Screen.h"
 #include <SPI.h>
 #include <TFT_eSPI.h>
+#include "Button.h"
 
 /* Structure for audio mixer type 
 * potentiometer_pin: pin for the potentiometer
@@ -24,6 +26,7 @@ class AudioMixer {
     public:
         Potentiometer potentiometer; // public for now?
         Screen screen; // public for now?
+        Button button; // public for now?
         AudioMixer();
         AudioMixer(AudioMixerType audioMixerData);
         AudioMixer(AudioMixerType audioMixerData, int devMode);

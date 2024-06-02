@@ -13,7 +13,7 @@ class Potentiometer {
         Potentiometer();
         Potentiometer(int pin);
         Potentiometer(int pin, int devMode);
-        void setValue();
+        void setValue(int value);
         int getValue();
         int read();
         void print();

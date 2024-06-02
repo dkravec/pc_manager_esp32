@@ -19,13 +19,12 @@ Potentiometer::Potentiometer(int pin, int devMode) {
 };
 
 /* should only be used when muting */
-void Potentiometer::setValue() {
+void Potentiometer::setValue(int value) {
     this->value = value;
 };
 
 /* can be used when wanting the current value*/
 int Potentiometer::getValue() {
-    this->read();
     return this->value;
 };
 

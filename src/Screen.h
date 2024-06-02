@@ -15,15 +15,12 @@ class Screen {
         Screen();
         Screen(int pin);
         Screen(int pin, int devMode);
-
         Screen(TFT_eSPI& tft);
         Screen(TFT_eSPI& tft, int pin);
         Screen(TFT_eSPI& tft, int pin, int devMode);
 
-        void setScreen(int type);
-        void powerScreen(int power);
         void volumeScreen(int volume);
         void print();
         void writeText(String text);
-        void jsonScreenData(String text);
+        String jsonScreenData(String text);
 };

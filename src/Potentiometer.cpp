@@ -13,18 +13,28 @@ Potentiometer::Potentiometer(int pin, int devMode) {
     this->pin = pin;
     this->value = 0;
     this->devMode = devMode;
+    this->override = false;
+
     if (this->devMode) {
         Serial.println("Potentiometer initialized");
     }
 };
 
-/* should only be used when muting */
-void Potentiometer::setValue(int value) {
-    this->value = value;
+/* should only be used when muting, and set override option*/
+void Potentiometer::setOverride(int value) {
+    this->override = true;
+    this->overrideValue = value;
+
 };
+void Potentiometer::disableOverride() {
+    this->override = false;
+}
 
 /* can be used when wanting the current value*/
 int Potentiometer::getValue() {
+    if (this->override == true) {
+        return this->overrideValue;
+    }
     return this->value;
 };
 
@@ -33,6 +43,7 @@ int Potentiometer::read() {
     if (this->pin == 0) {
         return 0;
     }
+
     int analogValue = analogRead(pin);
     float voltage = floatMap(analogValue, 0, 4095, 0, 3.3);
     int value = floatMap(voltage, 0, 3.3, 0, 100) / value_steps;
@@ -40,6 +51,7 @@ int Potentiometer::read() {
     int steppedValue = value * value_steps;
 
     this->analog_value = analogValue;
+
     if (this->value != steppedValue) {
         this->prev2Value = this->prevValue;
         this->prevValue = this->value;
@@ -48,10 +60,22 @@ int Potentiometer::read() {
         if (devMode) {
             this->print();
         }
+
+        /* check if override is enabled */
+        if (this->override == true) {
+            if (this->value == this->prev2Value) {
+                return 0;
+            } else {
+                this->override = false;
+            }
+        }
+
+        /* value was updated */
         if (this->prev2Value != this->value) {
             return 1;
         }
     }
+
     return 0;
 };
 

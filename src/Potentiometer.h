@@ -9,11 +9,14 @@ class Potentiometer {
         int prev2Value;
         int analog_value;
         int devMode;
+        bool override;
+        int overrideValue;
     public:
         Potentiometer();
         Potentiometer(int pin);
         Potentiometer(int pin, int devMode);
-        void setValue(int value);
+        void setOverride(int value);
+        void disableOverride();
         int getValue();
         int read();
         void print();

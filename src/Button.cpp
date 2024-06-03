@@ -17,7 +17,7 @@ Button::Button(int pin, int devMode) : pin(pin), devMode(devMode) {
     this->timePressed = 0;
     this->state = LOW;
     this->lastState = LOW;
-    this->actionTaken = 0;
+    this->actionTaken = 1;
     this->actionId = 0;
 }
 
@@ -33,32 +33,45 @@ void Button::setActionId(int actionId) {
 
 /* read current button state */
 int Button::read() {
+    if (this->pin == 0) {
+        return 0;
+    }
+
     int reading = digitalRead(this->pin);
-    //Serial.print("Pin: " + String(this->pin) + ", ");
-    //Serial.print("Reading: " + String(reading) + ", ");
 
     this->lastState = this->state;
     this->state = reading;
 
-    /* button was not pressed, and havent been*/
-    if (this->state == LOW && this->lastState == LOW) {
-        //Serial.println("1");
+    /* button started being pressed*/
+    if (this->state == HIGH && this->lastState == LOW) {
+        this->devPrint("Started press", reading);
+        this->timePressed = currentTimeMillis();
         this->actionTaken = 0;
         return 0;
     }
 
-    /* button started being pressed*/
-    if (this->state == HIGH && this->lastState == LOW) {
-        this->timePressed = currentTimeMillis();
-        //Serial.println("2");
-        return 0;
-    }
+    // add this if seeming to miss cycles of button press
+    //(this->state == LOW && this->actionTaken=0) ||
 
     /* button is not pressed anymore */
     if (this->state == LOW && this->lastState == HIGH) {
+        if ((currentTimeMillis() - this->timePressed) > this->timeoutShortPress) {
+            this->devPrint("Long press", reading);
+            this->actionTaken = 2;
+            return 2;
+        }
+        this->devPrint("short press", reading);
         this->actionTaken = 1;
         return 1;
     }
 
     return 0;
+}
+
+void Button::devPrint(String text, int reading) {
+    if (this->devMode) {
+        Serial.print("Pin: " + String(this->pin) + ", ");
+        Serial.print("Reading: " + String(reading) + ", ");
+        Serial.println("Info: " + text);
+    }
 }

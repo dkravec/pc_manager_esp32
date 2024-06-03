@@ -10,6 +10,7 @@ class Button {
         int lastState;
         int actionTaken;
         int actionId;
+        int timeoutShortPress = 350; // ms
     public:
         Button();
         Button(int pin);
@@ -17,5 +18,6 @@ class Button {
         int getActionId();
         void setActionId(int actionId);
         int read(); // if state changes 
+        void devPrint(String text, int reading);
         //void print();
 };

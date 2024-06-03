@@ -90,18 +90,5 @@ void loop() {
 	for (int i = 0; i < amountMixers; i++) {
 		readPotentiometer(*(audioMixers[i]));
 		readButton(*(audioMixers[i]));
-		//int buttonRead = audioMixers[i]->button.read();
-		//if (buttonRead == 1) {
-		//	int actionId = audioMixers[i]->button.getActionId();
-		//	// 0=unmute, 1=mute
-		//	if (actionId == 0) {
-		//		audioMixers[i]->potentiometer.setValue(0);
-		//		audioMixers[i]->button.setActionId(1);
-		//		refreshStates(*(audioMixers[i]));
-		//	} else if (actionId==1) {
-		//		readPotentiometer(*(audioMixers[i]));
-		//		audioMixers[i]->button.setActionId(0);
-		//	}
-		//}
 	}
 }

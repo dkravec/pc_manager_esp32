@@ -23,9 +23,9 @@
 // POTENTIOMETER_PIN, SCREEN_PIN, BUTTON_PIN, LED_PIN
 // if 0, will not be used
 AudioMixerType audioMixerType[amountMixers] = {
-	AudioMixerType({35, 19, 14, 25}),
-	AudioMixerType({33, 17, 34, 26}),
-	AudioMixerType({32, 22, 21, 27})
+	AudioMixerType({14, 21, 32, 27}),
+	AudioMixerType({12, 19, 35, 26}),
+	AudioMixerType({13, 18, 34, 25})
 };
 
 // Empty array of audio mixers

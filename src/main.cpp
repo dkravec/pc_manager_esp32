@@ -12,20 +12,20 @@
 
 // 0 = off, 1 = on
 // allows for debugging
-#define devMode 1	
+#define devMode 1
 
 // Pins for screens
-#define SCREEN_0_PIN 19
-#define SCREEN_1_PIN 17
-#define SCREEN_2_PIN 22
+#define SCREEN_0_PIN 21
+#define SCREEN_1_PIN 19
+#define SCREEN_2_PIN 18
 
 // Setup the audio mixers
 // POTENTIOMETER_PIN, SCREEN_PIN, BUTTON_PIN, LED_PIN
 // if 0, will not be used
 AudioMixerType audioMixerType[amountMixers] = {
 	AudioMixerType({14, 21, 32, 27}),
-	AudioMixerType({12, 19, 35, 26}),
-	AudioMixerType({13, 18, 34, 25})
+	AudioMixerType({15, 19, 35, 26}),
+	AudioMixerType({33, 18, 34, 25})
 };
 
 // Empty array of audio mixers

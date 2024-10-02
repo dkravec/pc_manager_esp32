@@ -28,10 +28,10 @@ class AudioMixer {
         Screen screen; // public for now?
         Button button; // public for now?
         AudioMixer();
-        AudioMixer(AudioMixerType audioMixerData);
-        AudioMixer(AudioMixerType audioMixerData, int devMode);
-        AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft);
-        AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft, int devMode);
+        AudioMixer(AudioMixerType& audioMixerData);
+        AudioMixer(AudioMixerType& audioMixerData, int devMode);
+        AudioMixer(AudioMixerType& audioMixerData, TFT_eSPI& tft);
+        AudioMixer(AudioMixerType& audioMixerData, TFT_eSPI& tft, int devMode);
         int getLedState();
         void setLedState(int analogLedValue);
         void refreshLedState();

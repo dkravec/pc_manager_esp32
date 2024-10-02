@@ -6,13 +6,13 @@
 #include <TFT_eSPI.h>
 
 /* Constructors for Audio Mixer*/
-AudioMixer::AudioMixer() : AudioMixer({0, 0, 0, 0}) { }
-AudioMixer::AudioMixer(AudioMixerType audioMixerData) : AudioMixer(audioMixerData, 0) { }
-AudioMixer::AudioMixer(AudioMixerType audioMixerData, int devMode) : AudioMixer(audioMixerData, *(new TFT_eSPI()), devMode){ }
-AudioMixer::AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft) : AudioMixer(audioMixerData, tft, 0) { }
+AudioMixer::AudioMixer() : AudioMixer(*new AudioMixerType({0,0,0,0})) { }
+AudioMixer::AudioMixer(AudioMixerType& audioMixerData) : AudioMixer(audioMixerData, 0) { }
+AudioMixer::AudioMixer(AudioMixerType& audioMixerData, int devMode) : AudioMixer(audioMixerData, *(new TFT_eSPI()), devMode){ }
+AudioMixer::AudioMixer(AudioMixerType& audioMixerData, TFT_eSPI& tft) : AudioMixer(audioMixerData, tft, 0) { }
 
 /* Final Constructor for Audio Mixer with TFT_eSPI*/
-AudioMixer::AudioMixer(AudioMixerType audioMixerData, TFT_eSPI& tft, int devMode) : audioMixerData(audioMixerData), screen(tft, audioMixerData.screen_cs_pin), devMode(devMode) {
+AudioMixer::AudioMixer(AudioMixerType& audioMixerData, TFT_eSPI& tft, int devMode) : audioMixerData(audioMixerData), screen(tft, audioMixerData.screen_cs_pin), devMode(devMode) {
     this->potentiometer = Potentiometer(this->audioMixerData.potentiometer_pin, this->devMode);
     this->button = Button(this->audioMixerData.button_pin, this->devMode);
 
